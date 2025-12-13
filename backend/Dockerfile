@@ -7,7 +7,7 @@ RUN apk add --no-cache git
 # Set working directory
 WORKDIR /app
 
-# Copy go mod files first (for better caching)
+# Copy go mod files
 COPY go.mod go.sum ./
 
 # Download dependencies
@@ -16,27 +16,25 @@ RUN go mod download
 # Copy all source code
 COPY . .
 
-# List directory structure for debugging
-RUN echo "=== Directory structure ===" && \
+# Debug: Show what we have
+RUN echo "=== Current directory ===" && \
+    pwd && \
+    echo "=== Directory listing ===" && \
     ls -la && \
+    echo "=== Looking for main.go ===" && \
+    find . -name "main.go" -type f && \
     echo "=== cmd directory ===" && \
-    ls -la cmd/ 2>/dev/null || echo "cmd/ not found" && \
-    echo "=== cmd/server directory ===" && \
-    ls -la cmd/server/ 2>/dev/null || echo "cmd/server/ not found"
+    ls -la cmd/ 2>/dev/null || echo "cmd/ not found in current dir" && \
+    echo "=== backend directory ===" && \
+    ls -la backend/ 2>/dev/null || echo "backend/ not found"
 
-# Build the application - try multiple path formats
+# Build - try the most likely path first
 RUN if [ -f "cmd/server/main.go" ]; then \
-        echo "Building from cmd/server/main.go" && \
-        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server cmd/server/main.go; \
-    elif [ -f "./cmd/server/main.go" ]; then \
-        echo "Building from ./cmd/server/main.go" && \
-        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server ./cmd/server/main.go; \
-    elif [ -d "./cmd/server" ]; then \
-        echo "Building from ./cmd/server" && \
+        echo "✓ Found cmd/server/main.go - building..." && \
         CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server ./cmd/server; \
     else \
-        echo "ERROR: Cannot find cmd/server directory or main.go file" && \
-        find . -name "main.go" -type f && \
+        echo "✗ cmd/server/main.go not found. Available files:" && \
+        find . -type f -name "*.go" | head -10 && \
         exit 1; \
     fi
 
