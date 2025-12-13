@@ -7,17 +7,38 @@ RUN apk add --no-cache git
 # Set working directory
 WORKDIR /app
 
-# Copy go mod files
+# Copy go mod files first (for better caching)
 COPY go.mod go.sum ./
 
 # Download dependencies
 RUN go mod download
 
-# Copy source code
+# Copy all source code
 COPY . .
 
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server .app/cmd/server
+# List directory structure for debugging
+RUN echo "=== Directory structure ===" && \
+    ls -la && \
+    echo "=== cmd directory ===" && \
+    ls -la cmd/ 2>/dev/null || echo "cmd/ not found" && \
+    echo "=== cmd/server directory ===" && \
+    ls -la cmd/server/ 2>/dev/null || echo "cmd/server/ not found"
+
+# Build the application - try multiple path formats
+RUN if [ -f "cmd/server/main.go" ]; then \
+        echo "Building from cmd/server/main.go" && \
+        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server cmd/server/main.go; \
+    elif [ -f "./cmd/server/main.go" ]; then \
+        echo "Building from ./cmd/server/main.go" && \
+        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server ./cmd/server/main.go; \
+    elif [ -d "./cmd/server" ]; then \
+        echo "Building from ./cmd/server" && \
+        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server ./cmd/server; \
+    else \
+        echo "ERROR: Cannot find cmd/server directory or main.go file" && \
+        find . -name "main.go" -type f && \
+        exit 1; \
+    fi
 
 # Final stage
 FROM alpine:latest
@@ -38,4 +59,3 @@ EXPOSE 8080
 
 # Run the server
 CMD ["./server"]
-
