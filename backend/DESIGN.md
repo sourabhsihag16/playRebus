@@ -699,13 +699,13 @@ createdb rebus_puzzles
 export DATABASE_URL="postgres://user:pass@localhost:5432/rebus_puzzles?sslmode=disable"
 
 # Run server
-go run cmd/server/main.go
+go run main.go
 ```
 
 ### Production Build
 
 ```bash
-go build -o server cmd/server/main.go
+go build -o server main.go
 ./server
 ```
 
@@ -716,7 +716,7 @@ FROM golang:1.21-alpine AS builder
 WORKDIR /app
 COPY . .
 RUN go mod download
-RUN go build -o server cmd/server/main.go
+RUN go build -o server main.go
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates

@@ -23,17 +23,15 @@ RUN echo "=== Current directory ===" && \
     ls -la && \
     echo "=== Looking for main.go ===" && \
     find . -name "main.go" -type f && \
-    echo "=== cmd directory ===" && \
-    ls -la cmd/ 2>/dev/null || echo "cmd/ not found in current dir" && \
-    echo "=== backend directory ===" && \
-    ls -la backend/ 2>/dev/null || echo "backend/ not found"
+    echo "=== Root directory ===" && \
+    ls -la . 2>/dev/null || echo "current dir listing failed"
 
 # Build - try the most likely path first
-RUN if [ -f "cmd/server/main.go" ]; then \
-        echo "✓ Found cmd/server/main.go - building..." && \
-        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server ./cmd/server; \
+RUN if [ -f "main.go" ]; then \
+        echo "✓ Found main.go - building..." && \
+        CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server .; \
     else \
-        echo "✗ cmd/server/main.go not found. Available files:" && \
+        echo "✗ main.go not found. Available files:" && \
         find . -type f -name "*.go" | head -10 && \
         exit 1; \
     fi

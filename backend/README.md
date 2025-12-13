@@ -6,9 +6,7 @@ A structured Go backend server for generating and serving rebus puzzles with dai
 
 ```
 backend/
-├── cmd/
-│   └── server/
-│       └── main.go          # Application entry point
+├── main.go                  # Application entry point
 ├── internal/
 │   ├── models/              # Data models
 │   │   └── puzzle.go
@@ -51,12 +49,12 @@ go mod download
 
 3. **Run the server**:
 ```bash
-go run cmd/server/main.go
+go run main.go
 ```
 
 Or build and run:
 ```bash
-go build -o server cmd/server/main.go
+go build -o server main.go
 ./server
 ```
 
@@ -247,7 +245,7 @@ The batch job runs in a background goroutine and continues running as long as th
 ### Building
 
 ```bash
-go build -o server cmd/server/main.go
+go build -o server main.go
 ```
 
 ### Testing

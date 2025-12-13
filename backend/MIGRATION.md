@@ -23,7 +23,7 @@ This document explains the restructuring of the backend project from a single-fi
 
 ### Package Organization
 
-1. **`cmd/server/`**: Application entry point
+1. **Root level**: Application entry point
    - `main.go`: Server initialization, routing, and startup
 
 2. **`internal/models/`**: Data models
@@ -78,12 +78,12 @@ This document explains the restructuring of the backend project from a single-fi
 
 ### Development
 ```bash
-go run cmd/server/main.go
+go run main.go
 ```
 
 ### Production Build
 ```bash
-go build -o server cmd/server/main.go
+go build -o server main.go
 ./server
 ```
 
