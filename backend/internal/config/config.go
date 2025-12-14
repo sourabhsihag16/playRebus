@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strings"
 )
 
 // Config holds application configuration
@@ -66,7 +67,15 @@ func Load() *Config {
 
 	// Allow additional origins from environment
 	if origins := os.Getenv("ALLOWED_ORIGINS"); origins != "" {
-		// Could parse comma-separated origins here
+		// Parse comma-separated origins
+		// Split by comma and trim whitespace from each origin
+		parts := strings.Split(origins, ",")
+		for _, part := range parts {
+			origin := strings.TrimSpace(part)
+			if origin != "" {
+				allowedOrigins = append(allowedOrigins, origin)
+			}
+		}
 	}
 
 	// Get environment type (local or production)
