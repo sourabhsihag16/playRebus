@@ -1,15 +1,45 @@
-# React + Vite
+# Dashboard - Rebus Puzzle Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + Vite frontend application for the Daily Rebus Puzzle game.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **Install dependencies**:
+```bash
+npm install
+```
 
-## React Compiler
+2. **Configure environment variables**:
+   - Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   - Edit `.env` and set `VITE_API_BASE_URL` to your backend API URL
+   - For local development: `VITE_API_BASE_URL=http://localhost:8080`
+   - For production: `VITE_API_BASE_URL=https://api.yourdomain.com`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+3. **Run development server**:
+```bash
+npm run dev
+```
+
+4. **Build for production**:
+```bash
+npm run build
+```
+
+## Environment Variables
+
+- `VITE_API_BASE_URL`: The base URL for the backend API. Defaults to `http://localhost:8080` if not set.
+
+**Note**: In Vite, only environment variables prefixed with `VITE_` are exposed to the client-side code. This is a security feature to prevent accidentally exposing sensitive server-side variables.
+
+## Development
+
+This project uses:
+- [React](https://react.dev/) for the UI
+- [Vite](https://vite.dev/) for build tooling and dev server
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) for Fast Refresh
 
 ## Expanding the ESLint configuration
 

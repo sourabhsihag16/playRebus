@@ -193,8 +193,17 @@ Format: rebus_solved_YYYY-MM-DD
 ## API Integration
 
 ### Base URL
+The API base URL is configured via the `VITE_API_BASE_URL` environment variable. 
+For local development, it defaults to `http://localhost:8080`.
+
 ```javascript
-const API_BASE_URL = 'http://localhost:8080'
+// In App.jsx
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+```
+
+To configure for deployment, create a `.env` file (or set environment variables):
+```bash
+VITE_API_BASE_URL=https://api.yourdomain.com
 ```
 
 ### Endpoints Used

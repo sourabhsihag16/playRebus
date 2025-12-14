@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-// API base URL - adjust this to match your backend
-const API_BASE_URL = 'http://localhost:8080'
+// API base URL - can be configured via VITE_API_BASE_URL environment variable
+// Defaults to http://localhost:8080 for local development
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
 function App() {
   const [puzzles, setPuzzles] = useState([])
